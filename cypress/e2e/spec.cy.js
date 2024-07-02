@@ -56,4 +56,55 @@ describe('template spec', () => {
     cy.get('.todo-list li')
       .should('have.length', 2);
   });
+
+  it('Elimina tarefas completas', () => {
+    cy.visit('http://127.0.0.1:7001');
+
+    cy.get('.new-todo')
+      .type('TP2 de ES{enter}')
+      .type('Refatoracao{enter}')
+      .type('Prova de ES{enter}');
+    
+    cy.get('.todo-list li .toggle')
+      .first()
+      .click();
+    
+    cy.get('.clear-completed')
+      .click();
+
+    cy.contains('All').click();
+    cy.get('.todo-list li')
+      .should('have.length', 2);
+  });
+
+  it('Edita tarefa', () => {
+    cy.visit('http://127.0.0.1:7001');
+
+    cy.get('.new-todo')
+    .type('TP2 de ES{enter}')
+    .type('Prova de ES{enter}');
+
+    cy.get('.todo-list li')
+      .first()
+      .dblclick()
+      .type('{selectall}{backspace}')
+      .type('Roteiro Refatoração{enter}');
+
+    cy.get('.todo-list li')
+      .first()
+      .should('have.text', 'Roteiro Refatoração');
+    
+  });
+
+  it('Confere número de tarefas restantes', () => {
+    cy.visit('http://127.0.0.1:7001');
+    
+    cy.get('.new-todo')
+      .type('TP2 de ES{enter}')
+      .type('Prova de ES{enter}');
+
+    cy.get('.todo-count')
+      .should('have.text', '2 items left');
+  });
+  
 });
